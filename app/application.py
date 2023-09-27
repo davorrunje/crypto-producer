@@ -2,7 +2,6 @@ from faststream import FastStream, Logger
 from faststream.kafka import KafkaBroker
 from pydantic import BaseModel, Field
 
-
 class Name(BaseModel):
     name: str = Field(..., description="Name of the person")
 
@@ -12,7 +11,7 @@ class Greeting(BaseModel):
 
 
 broker = KafkaBroker("localhost:9092")
-app = FastStream(broker)
+app = FastStream(broker, title="My service", version="0.1.0", description="My service description")
 
 to_greetings = broker.publisher("greetings")
 
