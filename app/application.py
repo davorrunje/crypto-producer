@@ -1,7 +1,7 @@
 import asyncio
 import random
 
-from faststream import ContextRepo, FastStream, Logger
+from faststream import FastStream, Logger
 from faststream.kafka import KafkaBroker
 from pydantic import BaseModel, Field
 
@@ -26,13 +26,12 @@ to_greetings = broker.publisher("greetings")
 async def on_names(msg: Name, logger: Logger) -> None:
     result = f"hello {msg.name}"
     logger.info(result)
-    # logger.info(random.normalvariate(0, 1))
     greeting = Greeting(greeting=result)
     await to_greetings.publish(greeting)
 
 
 @app.after_startup
-async def publish_name(logger: Logger, context: ContextRepo) -> None:
+async def publish_names() -> None:
     async def _publish_names() -> None:
         while True:
             name = random.choice(  # nosec
